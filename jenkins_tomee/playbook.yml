@@ -1,0 +1,8 @@
+---
+- hosts: cargo-server
+  roles:
+    - jenkins-server
+
+- hosts: app-server
+  roles:
+    - tomee-server

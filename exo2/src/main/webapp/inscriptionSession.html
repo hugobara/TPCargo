@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Saisie d'indentité</title>
+</head>
+<body>
+	<section>
+		<form id="identiteForm" method="POST" action="identiteSansSession">
+			<input name="etape" value="saisieIdentite" type="hidden">
+			<p>
+				<label for="firstnameId">Prénom</label>
+				<input id="firstnameId" name="prenom" type="text">
+			</p>
+			<p>
+				<label for="nameId">Nom</label>
+				<input id="nameId" name="nom" type="text">
+			</p>
+			<p><button type=submit>Suivant</button></p>
+		</form>
+	</section>
+</body>
+</html>

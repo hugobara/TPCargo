@@ -1,0 +1,50 @@
+- name: Installation de Git
+  package: name=git state=present
+
+- name: Installation de Maven
+  package: name=maven state=present
+
+- name: Installation du jdk8
+  package: name=openjdk-8-jdk-headless state=present
+
+- name: Création du compte pour Tomcat8
+  user:
+    name: tomcat8
+    shell: /bin/false
+    system: yes
+    home: '{{tomcat_home}}'
+
+- name: Installation de Tomcat 8
+  package: name=tomcat8 state=present
+  notify:
+    - déplacer l'appli web ROOT par défaut
+
+- name: Création des répertoires pour jenkins
+  file:
+    path: '{{jenkins_home}}'
+    state: directory
+    owner: tomcat8
+    group: tomcat8
+
+- name: Configuration du répertoire pour jenkins
+  lineinfile:
+    name: '/etc/default/tomcat8'
+    line: 'JENKINS_HOME={{jenkins_home}}'
+  notify:
+    - relancer Tomcat
+
+- name: Installation de jenkins
+  get_url:
+    url: '{{jenkins_url}}'
+    dest: '{{jenkins_war}}'
+    group: tomcat8
+    owner: tomcat8
+
+- name: Copie du fichier de déploiement pour Jenkins
+  template:
+    src: roles/jenkins-server/templates/context.xml
+    dest: '{{tomcat_dir}}/conf/Catalina/localhost/ROOT.xml'
+    owner: tomcat8
+    group: tomcat8
+  notify:
+    - relancer Tomcat
